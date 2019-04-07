@@ -1,0 +1,20 @@
+language: julia
+sudo: true
+dist: trusty
+os:
+    - linux
+addons:
+    apt:
+        packages:
+            - xvfb
+            - xauth
+            - libgtk-3-0
+julia:
+    - 0.7
+    - 1.0
+notifications:
+  email: false
+script:
+    - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
+    - julia -e 'using Pkg; Pkg.clone(pwd()); Pkg.build("ImageView")'
+    - xvfb-run julia -e 'using Pkg; Pkg.test("ImageView")'
